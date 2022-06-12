@@ -3,50 +3,62 @@ import os
 import vk_api
 from os import walk
 import time
+import re
 
-load_dotenv()
+# load_dotenv()
 
-access_token = os.getenv('VK_ACCESS_TOKEN')
-group_id = str(os.getenv('VK_GROUP_ID'))
+# access_token = os.getenv('VK_ACCESS_TOKEN')
+# group_id = str(os.getenv('VK_GROUP_ID'))
 
-vk_session = vk_api.VkApi(token=access_token)
+# vk_session = vk_api.VkApi(token=access_token)
 
-upload = vk_api.VkUpload(vk_session)
-
-
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-my_file = os.path.join(THIS_FOLDER, '1655039463/1.txt')
+# upload = vk_api.VkUpload(vk_session)
 
 
 
-ml = int(time.time() * 1000)
-video_file = './vids/'+str(ml)+'.mp4'
 
 
-video_file = './vids/vid.mp4'
-
-f = open('inc.txt', 'r')
-inc = int(f.read()) + 1
-f.close()
-
-f = open("inc.txt", "w")
-f.write(str(inc))
-f.close()
 
 
-video_name = 'американ тикток #' + str(inc)
+# video_file = './vids/vid.mp4'
+
+# f = open('inc.txt', 'r')
+# inc = int(f.read()) + 1
+# f.close()
+
+# f = open("inc.txt", "w")
+# f.write(str(inc))
+# f.close()
 
 
-video = upload.video(
-    video_file=video_file,
-    name=video_name,
-    group_id=group_id
-)
+# video_name = 'американ тикток #' + str(inc)
 
 
-video_desc = 'video' + str(video['owner_id']) + '_' + str(video['video_id'])
+# video = upload.video(
+#     video_file=video_file,
+#     name=video_name,
+#     group_id=group_id
+# )
 
 
-vk = vk_session.get_api()
+# video_desc = 'video' + str(video['owner_id']) + '_' + str(video['video_id'])
 
-print(vk.wall.post(owner_id='-'+group_id, from_group=1, attachments=video_desc))
+
+# vk = vk_session.get_api()
+
+# print(vk.wall.post(owner_id='-'+group_id, from_group=1, attachments=video_desc))
+
+
+
+regex = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:tiktok)' #localhost...
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+
+
+string = "https://www.tiktok.com/@thep00lguy/video/7098382184716717317"
+# string = "asdasd"
+
+print(re.match(regex, string) is not None ) 
