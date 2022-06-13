@@ -1,6 +1,6 @@
-Pyrogram==1.1.9
-requests
-tgcrypto
-pymongo[srv]
-python-dotenv
-bs4
+beautifulsoup4==4.11.1
+Pyrogram==2.0.27
+pyTelegramBotAPI==4.5.1
+python-dotenv==0.20.0
+requests==2.22.0
+vk_api==11.9.8
