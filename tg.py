@@ -29,7 +29,8 @@ def download_tiktok(link, message):
     }
     headers = {
       'x-rapidapi-host': os.getenv('RAPIDAPI_HOST'),
-      'x-rapidapi-key': os.getenv('RAPIDAPI_KEY')
+      'x-rapidapi-key': os.getenv('RAPIDAPI_KEY'),
+      'User-Agent': 'Mozilla/5.0'
     }
     
     ### Get your Free TikTok API from https://rapidapi.com/TerminalWarlord/api/tiktok-info/
@@ -39,7 +40,11 @@ def download_tiktok(link, message):
     r = requests.get(api, params=params, headers=headers).json()['videoLinks']['download']
     directory = str(round(time.time()))
     filename = str(int(time.time()))+'.mp4'
+
+    print(r)
     print(requests.head(r))
+    print(requests.head(r).headers)
+
     size = int(requests.head(r).headers['Content-length'])
     total_size = "{:.2f}".format(int(size) / 1048576)
     try:
