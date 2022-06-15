@@ -24,6 +24,7 @@ def download_tiktok(link, message):
 
     ml = int(time.time() * 1000)
     video_file = './vids/'+str(ml)+'.mp4'
+    vids_folder = 'vids'
 
     params = {
       "link": link
@@ -48,6 +49,10 @@ def download_tiktok(link, message):
     #size = int(requests.head(r).headers['Content-length'])
     #total_size = "{:.2f}".format(int(size) / 1048576)
 
+    try:
+        os.mkdir(vids_folder)
+    except:
+        pass
 
     urllib.request.urlretrieve(r, video_file)
 
