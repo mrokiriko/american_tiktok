@@ -5,6 +5,7 @@ import vk_api
 import time
 import re
 import requests
+import urllib.request
 
 load_dotenv()
 
@@ -38,68 +39,64 @@ def download_tiktok(link, message):
     
     api = f"https://tiktok-info.p.rapidapi.com/dl/"
     r = requests.get(api, params=params, headers=headers).json()['videoLinks']['download']
-    directory = str(round(time.time()))
-    filename = str(int(time.time()))+'.mp4'
-
+    
     print(r)
     print(requests.head(r))
     print(requests.head(r).headers)
 
-    size = int(requests.head(r).headers['Content-length'])
-    total_size = "{:.2f}".format(int(size) / 1048576)
-    try:
-        os.mkdir(directory)
-    except:
-        pass
-    with requests.get(r, timeout=(50, 10000), stream=True) as r:
-        r.raise_for_status()
-        with open(video_file, 'wb') as f:
-            chunk_size = 1048576
-            dl = 0
-            show = 1
-            for chunk in r.iter_content(chunk_size=chunk_size):
-                f.write(chunk)
-                dl = dl + chunk_size
-                percent = round(dl * 100 / size)
-                if percent > 100:
-                    percent = 100
-                if show == 1:
-                    try:
+
+    #size = int(requests.head(r).headers['Content-length'])
+    #total_size = "{:.2f}".format(int(size) / 1048576)
+
+
+    urllib.request.urlretrieve(r, video_file)
+
+
+    #with requests.get(r, timeout=(50, 10000), stream=True) as r:
+    #    r.raise_for_status()
+    #    with open(video_file, 'wb') as f:
+    #        chunk_size = 1048576
+    #        dl = 0
+    #        show = 1
+    #        for chunk in r.iter_content(chunk_size=chunk_size):
+    #            f.write(chunk)
+    #            dl = dl + chunk_size
+    #            percent = round(dl * 100 / size)
+    #            if percent > 100:
+    #                percent = 100
+    #            if show == 1:
+    #                try:
                         # bot.edit(f'__**URL :**__ __{message.text}__\n'
                         #        f'__**Total Size :**__ __{total_size} MB__\n'
                         #        f'__**Downloaded :**__ __{percent}%__\n',
                         #        disable_web_preview=False)
 
-                        bot.edit_message_text(f'__**URL :**__ __{message.text}__\n'
-                               f'__**Total Size :**__ __{total_size} MB__\n'
-                               f'__**Downloaded :**__ __{percent}%__\n',
-                               message.chat.id, message.message_id)
-                        print(total_size)
-                        print(percent, '%')
-                    except:
-                        pass
-                    if percent == 100:
-                        show = 0
+    #                    bot.edit_message_text(f'__**URL :**__ __{message.text}__\n'
+    #                           f'__**Total Size :**__ __{total_size} MB__\n'
+    #                           f'__**Downloaded :**__ __{percent}%__\n',
+    #                           message.chat.id, message.message_id)
+    #                    print(total_size)
+    #                    print(percent, '%')
+    #                except:
+    #                    pass
+    #                if percent == 100:
+    #                    show = 0
 
-        print(f'__Downloaded to the server!\n'
-               f'Uploading to Telegram Now ⏳__')
-        start = time.time()
-        title = filename
+    # start = time.time()
 
-        # app.send_document(chat_id=message.chat.id,
-        #                   document=f"./{directory}/{filename}",
-        #                   caption=f"**File :** __{filename}__\n"
-        #                   f"**Size :** __{total_size} MB__\n\n"
-        #                   f"__Uploaded by @{username}__",
-        #                   file_name=f"{directory}",
-        #                   parse_mode='md',
-        #                   progress=progress,
-        #                   progress_args=(a, start, title))
+    # app.send_document(chat_id=message.chat.id,
+    #                   document=f"./{directory}/{filename}",
+    #                   caption=f"**File :** __{filename}__\n"
+    #                   f"**Size :** __{total_size} MB__\n\n"
+    #                   f"__Uploaded by @{username}__",
+    #                   file_name=f"{directory}",
+    #                   parse_mode='md',
+    #                   progress=progress,
+    #                   progress_args=(a, start, title))
 
-        print(start)
-        print(title)
+    # print(start)
 
-        print('finish downloading')
+    print('finish downloading')
 
     return video_file
 
@@ -115,13 +112,13 @@ def publish_video(video_file):
 
     video_name = 'американ тикток #' + str(inc)
 
+    print('get video from', video_file)
 
     video = upload.video(
         video_file=video_file,
         name=video_name,
         group_id=group_id
     )
-
 
     video_desc = 'video' + str(video['owner_id']) + '_' + str(video['video_id'])
 
